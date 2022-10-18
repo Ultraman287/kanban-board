@@ -1,7 +1,7 @@
 # Database
 
 from sqlalchemy import Column, String, Integer, Enum, ForeignKey
-from app import db
+from app import db,app
 
 class User(db.Model):
     """User class
@@ -31,5 +31,6 @@ class Task(db.Model):
     status = db.Column(Enum('to_do', 'doing', 'done'))
 
 # Initialize database
-db.create_all()
-db.session.commit()
+with app.app_context():
+    db.create_all()
+    db.session.commit()

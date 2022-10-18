@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=EB+Garamond" type="text/css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/index.css') }}" type="text/css">
+    <script src="{{ url_for('static', filename='Scripts/script.js') }}"></script>
     <title>Kanban Board</title>
 </head>
 <body>
@@ -15,10 +16,25 @@
             <button>Add Item</button>
         </form>
     </div>
-    <div class="row">
-        <div class="column">
-            <h2>Task to do</h2>
-            <ul>
+
+    <div class="modal" id="todo_form">
+        <div class="header">
+          <div class="title">Add Todo</div>
+          <button class="btn close-modal">&times;</button>
+        </div>
+        <div class="body">
+            <form action="/add" method="post">
+                <input type="text" name="task"required placeholder="Add a new task to do">
+                <button>Add Item</button>
+            </form>
+        </div>
+      </div>
+
+    <div class="todo-container">
+        <div class="status" id="no_status">
+          <h1>To do</h1>
+          <ul>
+            <li><button id="add_btn" action="/toadd">+ Add Todo</button><li>
             {% for task in to_do %}
                 <li>{{ task.task }}</li>
                 <li>
@@ -28,21 +44,21 @@
             {% endfor %}    
             </ul>
         </div>
-        <div class="column">
-           <h2>Task in progress</h2>
-           <ul>
-           {% for task in doing %}
-               <li>{{ task.task }}</li>
-               <li>
-                    <button><a href="{{ url_for('change_status', id=task.id, status='to_do') }}">Mark as to do</a></button>
-                    <button><a href="{{ url_for('change_status', id=task.id, status='done') }}">Mark as done</a></button>
-                    <button><a href="{{ url_for('delete', id=task.id) }}">Delete task</a></button></li>
-            {% endfor %}    
-            </ul>
+        <div class="status">
+          <h1>Doing</h1>
+          <ul>
+            {% for task in doing %}
+                <li>{{ task.task }}</li>
+                <li>
+                     <button><a href="{{ url_for('change_status', id=task.id, status='to_do') }}">Mark as to do</a></button>
+                     <button><a href="{{ url_for('change_status', id=task.id, status='done') }}">Mark as done</a></button>
+                     <button><a href="{{ url_for('delete', id=task.id) }}">Delete task</a></button></li>
+             {% endfor %}    
+             </ul>
         </div>
-        <div class="column">
-        <h2>Task done</h2>
-            <ul>
+        <div class="status">
+          <h1>Done</h1>
+          <ul>
             {% for task in done %}
                <li>{{ task.task }}</li>
                <li>
@@ -52,9 +68,14 @@
             {% endfor %}
             </ul>
         </div>
-    </div>
+      </div>
+      <div id="overlay"></div>
+
+    
         {% for message in get_flashed_messages() %}
             <div class=flash>{{ message }}</div>
         {% endfor %}    
+
+        
 </body>
 </html>

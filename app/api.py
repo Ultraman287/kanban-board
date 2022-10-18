@@ -101,6 +101,25 @@ def add():
     db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/toadd')
+def overlay():
+    """Redirect to sign up page"""
+    return render_template('signup.html')
+    # """Add new task"""
+    # # Need to be logged in to add task
+    # if not session.get('username'):
+    #     abort(401)
+    # # If logged in, then add task to the database
+    # to_do = Task(
+    #     username=session.get('username'),
+    #     task=request.form['task'],
+    #     status='to_do'
+    # )
+    # db.session.add(to_do)
+    # db.session.commit()
+    # return redirect(url_for('index'))
+
+
 @app.route('/task/<id>/<status>')
 def change_status(id,status):
     """Change status of task"""
